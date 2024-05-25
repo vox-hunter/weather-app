@@ -10,6 +10,7 @@ def get_info(lat, lon, unit="celsius"):
     return data
 
 def heat_index(temperature, humidity, unit="celsius"):
+    # for warnings
     if unit == "celsius":
         temperature = temperature * 9/5 + 32
     else:
