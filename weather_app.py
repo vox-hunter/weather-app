@@ -5,16 +5,21 @@ import requests
 from streamlit_extras.let_it_rain import rain
 from streamlit_extras.bottom_container import bottom
 import geocoder
+from streamlit_js_eval import get_geolocation
 
 def get_info(lat, lon, unit="celsius"):
     data = get_weather(lat, lon, unit=unit)
     return data
 
 def get_location():
-    g = geocoder.ip('me')
-    lat = g.latlng[0]
-    lon = g.latlng[1]
-    #print(round(lat, 2), round(lon, 2))
+    # Get the location
+    try:
+        loc = get_geolocation()
+        lat = loc["coords"]["latitude"]
+        lon = loc["coords"]["longitude"]
+    except Exception as e:
+        raise ValueError("An error occurred while getting the location.")
+        return
     return round(lat, 2), round(lon, 2)
 
 def heat_index(temperature, humidity, unit="celsius"):
@@ -55,7 +60,16 @@ def main():
             st.error(f"Please enter an valid location")
             return
     else:
-        lat, lon = get_location()
+        try:
+            location = get_location()
+            if location is None:
+                st.error("Please allow your location or enter a location manually.")
+                return
+            else:
+                lat, lon = location
+        except ValueError as e:
+            st.error(f"Please allow your location or enter a location manually.")
+            return
     option = st.selectbox(
    "Change temperature unit:",
    ("°C", "°F"),
