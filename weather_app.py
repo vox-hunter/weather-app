@@ -1,13 +1,21 @@
-from weather import get_weather, get_location
+from weather import get_weather
 import streamlit as st
 import time
 import requests
 from streamlit_extras.let_it_rain import rain
 from streamlit_extras.bottom_container import bottom
+import geocoder
 
 def get_info(lat, lon, unit="celsius"):
     data = get_weather(lat, lon, unit=unit)
     return data
+
+def get_location():
+    g = geocoder.ip('me')
+    lat = g.latlng[0]
+    lon = g.latlng[1]
+    #print(round(lat, 2), round(lon, 2))
+    return round(lat, 2), round(lon, 2)
 
 def heat_index(temperature, humidity, unit="celsius"):
     # for warnings
