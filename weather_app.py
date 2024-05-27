@@ -196,7 +196,6 @@ def main():
     st.write(f"Chance of Rain: {hourly_precipitation_prob}%")
     st.write(f"Relative Humidity: {current_relative_humidity}%")
 
-    rain_amount = 2
     if rain_amount > 0:
         rain(emoji="💧",font_size=20,falling_speed=5,animation_length="infinite")
     if showers > 0:
