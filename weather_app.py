@@ -4,8 +4,10 @@ import time
 import requests
 from streamlit_extras.let_it_rain import rain
 from streamlit_extras.bottom_container import bottom
-import geocoder
 from streamlit_js_eval import get_geolocation
+from streamlit_lottie import st_lottie
+
+key = "9ScW6YjbnCvRR9wClJVkbgoJsonPcmpy"
 
 def get_info(lat, lon, unit="celsius"):
     data = get_weather(lat, lon, unit=unit)
@@ -21,6 +23,11 @@ def get_location():
         raise ValueError("An error occurred while getting the location.")
         return
     return round(lat, 2), round(lon, 2)
+
+def additional_info(lat, lon):
+    raw = requests.get(f"https://api.pirateweather.net/forecast/{key}/{lat},{lon}")
+    data = raw.json()
+    return data
 
 def heat_index(temperature, humidity, unit="celsius"):
     # for warnings
@@ -48,6 +55,7 @@ def heat_index(temperature, humidity, unit="celsius"):
     return heat_index
 
 def main():
+    st.markdown('<div class="content">', unsafe_allow_html=True)
     st.title("Weather App")
     location = st.text_input("Please enter your city or enter to use your current location: ").strip().upper()
     if location:
@@ -75,7 +83,7 @@ def main():
    ("°C", "°F"),
    index=None,
    placeholder="Select a unit...",
-)
+)   
     with bottom():
         st.write("Made by Vox Hunter with ❤️")
     if option == None:
@@ -117,11 +125,20 @@ def main():
         st.write(f"Process has been completed in {round(generationtime_ms, 2)}ms")
         st.toast("Succesfully Completed!")
         st.success("Data Extracted!")
+    # Additional info
+    additional_data = additional_info(lat, lon)
+    if additional_data["hourly"]["icon"] == "cloudy":
+        pass
     temp, app_temp, max_temp, min_temp = st.columns(4)
     # Display the weather data
     # Current temperature
     if option == "°C":
         heat_index_value = heat_index(current_temperature, current_relative_humidity)
+        try:
+            if additional_data["alerts"]:
+                st.warning(f"Alert: {additional_data['alerts']['title']}", icon="⚠️")
+        except KeyError:
+            pass
         if heat_index_value > 80:
             st.warning("Excessive Heat Warning! Take precautions to avoid heat-related illnesses.", icon="⚠️")
         if round(current_temperature) > round(hourly_temperature):
@@ -179,10 +196,9 @@ def main():
     st.write(f"Chance of Rain: {hourly_precipitation_prob}%")
     st.write(f"Relative Humidity: {current_relative_humidity}%")
 
-    #testing
+    rain_amount = 2
     if rain_amount > 0:
-        st.write(f"Rain: {rain_amount}mm")
-        rain(emoji="💧",font_size=20,falling_speed=3,animation_length="infinite")
+        rain(emoji="💧",font_size=20,falling_speed=5,animation_length="infinite")
     if showers > 0:
         st.write(f"Showers: {showers}mm")
     st.write(f"Wind Speed: {current_wind_speed}m/s")
