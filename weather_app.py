@@ -5,7 +5,6 @@ import requests
 from streamlit_extras.let_it_rain import rain
 from streamlit_extras.bottom_container import bottom
 from streamlit_js_eval import get_geolocation
-from streamlit_lottie import st_lottie
 
 
 def get_info(lat, lon, unit="celsius"):
@@ -20,7 +19,6 @@ def get_location():
         lon = loc["coords"]["longitude"]
     except Exception as e:
         raise ValueError("An error occurred while getting the location.")
-        return
     return round(lat, 2), round(lon, 2)
 
 
