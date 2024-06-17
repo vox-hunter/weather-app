@@ -3,6 +3,7 @@
 This is a simple weather application built using Streamlit that fetches and displays weather data based on the user's location or a manually entered city.
 
 You can view the live app [here](https://weather-web-app.streamlit.app).
+**This app is no longer updated**
 
 ## Features
 
