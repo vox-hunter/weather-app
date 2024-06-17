@@ -49,7 +49,7 @@ def heat_index(temperature, humidity, unit="celsius"):
 
 def main():
     st.markdown('<div class="content">', unsafe_allow_html=True)
-    st.title("Weather App")
+    st.title("Today's Weather")
     location = st.text_input("Please enter your city or enter to use your current location: ").strip().upper()
     if location:
         raw = requests.get(f"https://geocoding-api.open-meteo.com/v1/search?name={location}&count=10&language=en&format=json")
@@ -125,7 +125,7 @@ def main():
     if option == "°C":
         heat_index_value = heat_index(current_temperature, current_relative_humidity)
         if heat_index_value > 80:
-            st.warning("Excessive Heat Warning! Take precautions to avoid heat-related illnesses.", icon="⚠️")
+            st.warning("Excessive Heat Alert! Take precautions to avoid heat-related illnesses.", icon="⚠️")
         if round(current_temperature) > round(hourly_temperature):
                 temp.metric("Current Temp", f"{current_temperature}°C", f"{round(current_temperature - hourly_temperature)}°C", delta_color="inverse")
         elif round(current_temperature) < round(hourly_temperature):
