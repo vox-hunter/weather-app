@@ -48,6 +48,7 @@ def heat_index(temperature, humidity, unit="celsius"):
     return heat_index
 
 def main():
+    """This function is the entry point of the weather app. It fetches weather data based on the user's location or input city and displays the current weather information."""
     st.markdown('<div class="content">', unsafe_allow_html=True)
     st.title("Today's Weather")
     location = st.text_input("Please enter your city or enter to use your current location: ").strip().upper()
@@ -109,7 +110,7 @@ def main():
     hourly_temperature, hourly_apparent_temperature, yesterday_max_temp, yesterday_min_temp, rain_amount, showers, generationtime_ms, current_temperature, current_relative_humidity, current_apparent_temperature, current_wind_speed, current_wind_direction, hourly_precipitation_prob, hourly_snow_depth, hourly_visibility, hourly_soil_temp, daily_max_temp, daily_min_temp, daily_sunrise, daily_sunset, daily_daylight_duration, daily_uv_index_max, daily_units_temperature_max, daily_units_temperature_min, daily_units_sunrise, daily_units_sunset, daily_units_daylight_duration, daily_units_uv_index_max = data
     with st.status("Downloading data..."):
         st.write("Fetching Weather Data...")
-        time.sleep(1)
+        time.sleep(0.5)
         if data:
             st.write("Data Fetched!")
             st.toast('Data Fetched!')
